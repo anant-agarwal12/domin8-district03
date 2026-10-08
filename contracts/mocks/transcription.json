@@ -1,0 +1,9 @@
+{
+  "imageId": "img_demo_2",
+  "lines": [
+    { "n": 1, "text": "Given: $m = 2$, $v = 3$", "legible": true },
+    { "n": 2, "text": "$E = \\frac{1}{2} m v^2$", "legible": true },
+    { "n": 3, "text": "$E = ?$", "legible": false },
+    { "n": 4, "text": "Answer: 9 J", "legible": true }
+  ]
+}

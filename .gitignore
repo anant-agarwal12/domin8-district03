@@ -1,0 +1,28 @@
+# secrets
+.env
+.env.local
+.env.*.local
+api/secrets/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# api runtime data
+api/.cache/
+api/data/uploads/
+api/data/chroma/
+
+# node / next
+node_modules/
+.next/
+out/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
