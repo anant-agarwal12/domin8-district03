@@ -1,0 +1,10 @@
+{
+  "id": "q_demo_1",
+  "course": "xyz",
+  "topic": "unit-1-topic-a",
+  "text": "Demo 10-mark question. Replace with a real question from the chosen course.",
+  "marks": 10,
+  "source": "sample",
+  "year": null,
+  "rubricId": "r_demo_1"
+}

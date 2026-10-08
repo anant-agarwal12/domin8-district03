@@ -1,0 +1,15 @@
+{
+  "id": "r_demo_1",
+  "questionId": "q_demo_1",
+  "status": "proposed",
+  "steps": [
+    { "id": "s1", "description": "States the given quantities and what is asked", "marks": 2, "type": "setup", "expected": "All given values listed with symbols" },
+    { "id": "s2", "description": "Writes the governing formula", "marks": 2, "type": "formula", "expected": "Correct formula stated before use" },
+    { "id": "s3", "description": "Substitutes values correctly", "marks": 2, "type": "method", "expected": "Values placed into the formula" },
+    { "id": "s4", "description": "Calculates correctly", "marks": 2, "type": "calculation", "expected": "Correct intermediate and final arithmetic" },
+    { "id": "s5", "description": "Final answer with units", "marks": 2, "type": "final_answer", "expected": "Boxed answer with correct SI units" }
+  ],
+  "maxMarks": 10,
+  "editedBy": null,
+  "updatedAt": "2026-10-08T14:00:00Z"
+}

@@ -1,0 +1,7 @@
+{
+  "uid": "demo-student-1",
+  "name": "Demo Student",
+  "role": "student",
+  "course": "xyz",
+  "examDate": "2026-11-20"
+}

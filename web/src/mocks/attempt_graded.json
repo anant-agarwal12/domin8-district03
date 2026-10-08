@@ -1,0 +1,26 @@
+{
+  "id": "a_demo_1",
+  "uid": "demo-student-1",
+  "questionId": "q_demo_1",
+  "rubricId": "r_demo_1",
+  "inputType": "typed",
+  "imageId": null,
+  "lines": [
+    { "n": 1, "text": "Given: $m = 2$, $v = 3$", "legible": true },
+    { "n": 2, "text": "$E = \\frac{1}{2}(2)(3)^2$", "legible": true },
+    { "n": 3, "text": "$E = 9$", "legible": true },
+    { "n": 4, "text": "Answer: 9", "legible": true }
+  ],
+  "stepResults": [
+    { "stepId": "s1", "awarded": 2, "max": 2, "matchedLines": [1], "reason": "Given values stated with symbols.", "errorType": null, "fix": null },
+    { "stepId": "s2", "awarded": 0, "max": 2, "matchedLines": [], "reason": "The formula is never written before values are substituted.", "errorType": "formula", "fix": "Write the formula on its own line first, then substitute." },
+    { "stepId": "s3", "awarded": 2, "max": 2, "matchedLines": [2], "reason": "Values substituted correctly.", "errorType": null, "fix": null },
+    { "stepId": "s4", "awarded": 2, "max": 2, "matchedLines": [3], "reason": "Arithmetic is correct.", "errorType": null, "fix": null },
+    { "stepId": "s5", "awarded": 0, "max": 2, "matchedLines": [4], "reason": "Final answer has no units.", "errorType": "units", "fix": "State the answer with its unit, for example 9 J." }
+  ],
+  "total": 6,
+  "max": 10,
+  "confidence": "high",
+  "confidenceReason": null,
+  "gradedAt": "2026-10-08T14:10:00Z"
+}
