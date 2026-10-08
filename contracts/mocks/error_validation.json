@@ -1,0 +1,6 @@
+{
+  "error": {
+    "code": "validation_error",
+    "message": "Rubric steps add up to 8 marks but question q_e2b41226 is worth 10 marks"
+  }
+}

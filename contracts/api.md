@@ -1,4 +1,4 @@
-# API contract — v0.1 (phases 0–2 final; later phases sketched)
+# API contract — v0.2 (phases 0–2 final; later phases sketched)
 
 Base URL: `NEXT_PUBLIC_API_URL` (dev: `http://localhost:8000`). All bodies are JSON unless marked multipart.
 Field names are camelCase on the wire. Timestamps are ISO 8601 strings in UTC.
@@ -21,7 +21,12 @@ Teachers are set by hand in the Firestore console for the demo.
 ```json
 { "error": { "code": "not_found", "message": "Rubric r_123 does not exist" } }
 ```
-Codes: `unauthorized` 401, `forbidden` 403, `not_found` 404, `invalid_input` 422, `llm_failed` 502, `internal` 500.
+Codes: `unauthorized` 401, `forbidden` 403, `not_found` 404, `invalid_input` 422, `validation_error` 422, `llm_failed` 502, `internal` 500.
+
+`invalid_input` is a malformed request (missing field, wrong type). `validation_error` is a well-formed request that breaks a rule —
+mock: `mocks/error_validation.json`.
+
+Clients must branch on `error.code` and show `error.message` as-is. Never match the message text: wording may change without a version bump.
 
 ---
 
@@ -88,9 +93,13 @@ type Rubric = {
 ### `PUT /rubrics/{id}`
 Body: `{ steps: RubricStep[] }` (step ids kept; new steps may omit `id`). Sets status back to `"proposed"`.
 `200` → `Rubric`
+`422` `validation_error` → the step marks do not add up to the question's marks. The message names both totals, e.g.
+"Rubric steps add up to 8 marks but question q_e2b41226 is worth 10 marks". Nothing is saved. Mock: `mocks/error_validation.json`.
 
 ### `POST /rubrics/{id}/confirm`
 `200` → `Rubric` with `status: "confirmed"` — mock: `mocks/rubric_confirmed.json`
+`422` `validation_error` → the step marks do not add up to the question's marks (same message form as `PUT`). The rubric stays
+`"proposed"`. Mock: `mocks/error_validation.json`.
 
 ### `GET /rubrics/{id}` → `Rubric`
 
