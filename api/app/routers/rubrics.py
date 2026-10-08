@@ -36,7 +36,9 @@ def update_rubric(
     rubric_id: str, body: RubricUpdateIn, user: CurrentUser = Depends(current_user), db: Any = Depends(get_db)
 ) -> Rubric:
     current = load(db, "rubrics", rubric_id, Rubric, "Rubric")
+    question = load(db, "questions", current.questionId, Question, "Question")
     rubric = rubric_logic.build_rubric(current.id, current.questionId, body.steps, "proposed", user.uid)
+    rubric_logic.require_marks_match(rubric.steps, question)
     save(db, "rubrics", rubric)
     return rubric
 
@@ -46,6 +48,8 @@ def confirm_rubric(
     rubric_id: str, user: CurrentUser = Depends(current_user), db: Any = Depends(get_db)
 ) -> Rubric:
     current = load(db, "rubrics", rubric_id, Rubric, "Rubric")
+    question = load(db, "questions", current.questionId, Question, "Question")
+    rubric_logic.require_marks_match(current.steps, question)
     rubric = current.model_copy(update={"status": "confirmed", "editedBy": user.uid})
     rubric.updatedAt = now_iso()
     save(db, "rubrics", rubric)

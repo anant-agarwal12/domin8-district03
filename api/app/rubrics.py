@@ -106,3 +106,12 @@ def build_rubric(
         updatedAt=now_iso(),
     )
 
+
+
+def require_marks_match(steps: list[RubricStep], question: Question) -> None:
+    total = sum_marks(steps)
+    if abs(total - question.marks) > 1e-6:
+        raise ApiError(
+            "validation_error",
+            f"Rubric steps add up to {total:g} marks but question {question.id} is worth {question.marks:g} marks",
+        )

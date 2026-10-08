@@ -12,10 +12,13 @@ STATUS_BY_CODE = {
     "forbidden": 403,
     "not_found": 404,
     "invalid_input": 422,
+    "validation_error": 422,
     "llm_failed": 502,
     "internal": 500,
 }
-CODE_BY_STATUS = {status: code for code, status in STATUS_BY_CODE.items()}
+CODE_BY_STATUS: dict[int, str] = {}
+for _code, _status in STATUS_BY_CODE.items():
+    CODE_BY_STATUS.setdefault(_status, _code)  # first code wins, so a bare HTTP 422 stays invalid_input
 
 
 class ApiError(Exception):
