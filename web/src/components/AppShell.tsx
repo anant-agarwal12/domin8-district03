@@ -1,10 +1,18 @@
 "use client";
 
+import Link from "next/link";
+import type { ReactNode } from "react";
 import { useAuth } from "./AuthProvider";
 import { ErrorNotice } from "./ErrorNotice";
 import { SignInPage } from "./SignInPage";
 
-export function AppShell() {
+const NAV = [
+  { href: "/questions/new", label: "New question" },
+  { href: "/answer", label: "Answer" },
+  { href: "/attempts", label: "My attempts" },
+];
+
+export function AppShell({ children }: { children: ReactNode }) {
   const { status, profile, profileError, signOut, reloadProfile } = useAuth();
 
   if (status === "loading") {
@@ -20,7 +28,9 @@ export function AppShell() {
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-10 border-b border-line bg-paper/90 backdrop-blur">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-3 px-4">
-          <span className="text-lg font-bold tracking-tight text-accent">xyz</span>
+          <Link href="/" className="text-lg font-bold tracking-tight text-accent">
+            xyz
+          </Link>
           <div className="flex min-w-0 items-center gap-3">
             {profile && (
               <p className="min-w-0 truncate text-sm">
@@ -38,6 +48,17 @@ export function AppShell() {
             </button>
           </div>
         </div>
+        <nav className="mx-auto flex w-full max-w-5xl gap-1 overflow-x-auto px-3 pb-2" aria-label="Main">
+          {NAV.map((n) => (
+            <Link
+              key={n.href}
+              href={n.href}
+              className="shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium text-muted hover:bg-navy/5 hover:text-navy"
+            >
+              {n.label}
+            </Link>
+          ))}
+        </nav>
       </header>
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
         {profileError ? (
@@ -47,14 +68,7 @@ export function AppShell() {
             onRetry={() => void reloadProfile()}
           />
         ) : profile ? (
-          <section className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
-            <h1 className="text-2xl font-semibold">Hi, {profile.name}</h1>
-            <p className="mt-1 text-muted">
-              Signed in as a {profile.role}
-              {profile.course ? ` · ${profile.course}` : ""}
-              {profile.examDate ? ` · exam ${profile.examDate}` : ""}.
-            </p>
-          </section>
+          children
         ) : (
           <p className="text-muted" aria-busy="true">
             Loading your profile…

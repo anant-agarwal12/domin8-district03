@@ -90,6 +90,28 @@ async function json<T>(method: string, path: string, body?: unknown, withAuth = 
   return (await send(method, path, body, withAuth)).json() as Promise<T>;
 }
 
+// Mock mode only: remembers the last saved rubric so edits survive Save / Confirm.
+const mockRubrics = new Map<string, Rubric>();
+
+function mockRubric(
+  id: string,
+  steps: RubricStepInput[],
+  status: Rubric["status"],
+  questionId = rubricProposed.questionId,
+): Rubric {
+  const full = steps.map((s, i) => ({ ...s, id: s.id ?? `s${Date.now()}_${i}` }));
+  const rubric: Rubric = {
+    ...(rubricProposed as Rubric),
+    id,
+    questionId,
+    status,
+    steps: full,
+    maxMarks: full.reduce((t, s) => t + s.marks, 0),
+  };
+  mockRubrics.set(id, rubric);
+  return rubric;
+}
+
 const q = (params: Record<string, string>) => `?${new URLSearchParams(params)}`;
 
 export const api = {
@@ -110,19 +132,21 @@ export const api = {
   listQuestions: (course: string): Promise<{ items: Question[] }> =>
     USE_MOCKS ? mock({ items: [question] }) : json("GET", `/questions${q({ course })}`),
   extractRubric: (body: RubricExtractRequest): Promise<Rubric> =>
-    USE_MOCKS ? mock({ ...rubricProposed, questionId: body.questionId }) : json("POST", "/rubrics/extract", body),
+    USE_MOCKS ? mock(mockRubric(rubricProposed.id, (rubricProposed as Rubric).steps, "proposed", body.questionId)) : json("POST", "/rubrics/extract", body),
   updateRubric: (id: string, steps: RubricStepInput[]): Promise<Rubric> =>
-    USE_MOCKS ? mock({ ...rubricProposed, id }) : json("PUT", `/rubrics/${encodeURIComponent(id)}`, { steps }),
+    USE_MOCKS ? mock(mockRubric(id, steps, "proposed")) : json("PUT", `/rubrics/${encodeURIComponent(id)}`, { steps }),
   confirmRubric: (id: string): Promise<Rubric> =>
-    USE_MOCKS ? mock({ ...rubricConfirmed, id }) : json("POST", `/rubrics/${encodeURIComponent(id)}/confirm`),
+    USE_MOCKS
+      ? mock({ ...(mockRubrics.get(id) ?? rubricConfirmed), id, status: "confirmed" })
+      : json("POST", `/rubrics/${encodeURIComponent(id)}/confirm`),
   getRubric: (id: string): Promise<Rubric> =>
-    USE_MOCKS ? mock({ ...rubricConfirmed, id }) : json("GET", `/rubrics/${encodeURIComponent(id)}`),
+    USE_MOCKS ? mock({ ...(mockRubrics.get(id) ?? rubricProposed), id }) : json("GET", `/rubrics/${encodeURIComponent(id)}`),
   gradeAttempt: (body: GradeRequest): Promise<Attempt> =>
     USE_MOCKS
       ? mock(body.inputType === "photo" ? attemptLow : attemptGraded)
       : json("POST", "/attempts/grade", body),
   getAttempt: (id: string): Promise<Attempt> =>
-    USE_MOCKS ? mock({ ...attemptGraded, id }) : json("GET", `/attempts/${encodeURIComponent(id)}`),
+    USE_MOCKS ? mock(id === attemptLow.id ? attemptLow : { ...attemptGraded, id }) : json("GET", `/attempts/${encodeURIComponent(id)}`),
   listAttempts: (uid: string): Promise<{ items: Attempt[] }> =>
     USE_MOCKS ? mock({ items: [attemptLow, attemptGraded] }) : json("GET", `/attempts${q({ uid })}`),
 

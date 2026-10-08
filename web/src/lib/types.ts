@@ -123,6 +123,7 @@ export type ErrorCode =
   | "forbidden"
   | "not_found"
   | "invalid_input"
+  | "validation_error"
   | "llm_failed"
   | "internal";
 
