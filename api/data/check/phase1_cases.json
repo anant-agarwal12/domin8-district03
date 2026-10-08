@@ -19,6 +19,102 @@
         "Answer: 9"
       ],
       "expectedTotal": 6
+    },
+    {
+      "name": "max height, full marks",
+      "question": {
+        "course": "Engineering Physics",
+        "topic": "Kinematics",
+        "text": "A ball is thrown vertically upward at 20 m/s. Find the maximum height reached. Take g = 10 m/s^2.",
+        "marks": 5,
+        "source": "sample",
+        "year": null
+      },
+      "kind": "scheme",
+      "scheme": "1 mark: correct equation v^2 = u^2 - 2gh with v = 0 at the top. 1 mark: correct substitution. 2 marks: correct calculation h = 20. 1 mark: unit (m).",
+      "answerLines": [
+        "At the top v = 0",
+        "v^2 = u^2 - 2gh",
+        "0 = 20^2 - 2(10)h",
+        "h = 400/20 = 20 m"
+      ],
+      "expectedTotal": 5
+    },
+    {
+      "name": "net force, units missing",
+      "question": {
+        "course": "Engineering Physics",
+        "topic": "Newton's laws",
+        "text": "A 5 kg block accelerates from rest to 10 m/s in 4 s. Find the net force on it.",
+        "marks": 5,
+        "source": "sample",
+        "year": null
+      },
+      "kind": "scheme",
+      "scheme": "1 mark: a = (v - u)/t stated. 1 mark: a = 2.5 m/s^2. 1 mark: F = ma stated. 1 mark: F = 12.5. 1 mark: units given for the final answer (N).",
+      "answerLines": [
+        "a = (v - u)/t = (10 - 0)/4 = 2.5",
+        "F = ma",
+        "F = 5 x 2.5 = 12.5"
+      ],
+      "expectedTotal": 4
+    },
+    {
+      "name": "lift normal force, wrong sign",
+      "question": {
+        "course": "Engineering Physics",
+        "topic": "Newton's laws",
+        "text": "A 60 kg person stands in a lift accelerating upward at 2 m/s^2. Find the normal force on the person. Take g = 10 m/s^2.",
+        "marks": 6,
+        "source": "sample",
+        "year": null
+      },
+      "kind": "scheme",
+      "scheme": "1 mark: forces identified (N upward, mg downward). 2 marks: correct equation N - mg = ma. 1 mark: correct substitution N = 60(10 + 2). 1 mark: N = 720. 1 mark: unit (N). No marks are carried forward from an incorrect equation, except the unit mark.",
+      "answerLines": [
+        "Forces: N up, mg down",
+        "N = mg - ma",
+        "N = 600 - 120",
+        "N = 480 N"
+      ],
+      "expectedTotal": 2
+    },
+    {
+      "name": "free fall time, skipped step",
+      "question": {
+        "course": "Engineering Physics",
+        "topic": "Kinematics",
+        "text": "An object falls from rest through 45 m. Find the time taken. Take g = 10 m/s^2.",
+        "marks": 5,
+        "source": "sample",
+        "year": null
+      },
+      "kind": "scheme",
+      "scheme": "1 mark: s = ut + (1/2)gt^2 stated. 1 mark: correct substitution 45 = 5t^2. 1 mark: t^2 = 9 shown explicitly. 1 mark: t = 3. 1 mark: unit (s).",
+      "answerLines": [
+        "s = ut + (1/2)gt^2",
+        "45 = 5t^2",
+        "t = 3 s"
+      ],
+      "expectedTotal": 4
+    },
+    {
+      "name": "work at an angle, formula missing cos",
+      "question": {
+        "course": "Engineering Physics",
+        "topic": "Work and energy",
+        "text": "A force of 10 N moves a body 5 m, at 60 degrees to the displacement. Find the work done. Take cos 60 = 0.5.",
+        "marks": 6,
+        "source": "sample",
+        "year": null
+      },
+      "kind": "scheme",
+      "scheme": "2 marks: correct formula W = F s cos(theta). 1 mark: correct substitution. 1 mark: cos 60 = 0.5 used. 1 mark: W = 25. 1 mark: unit (J). No marks are carried forward from an incorrect formula, except the unit mark.",
+      "answerLines": [
+        "W = F x s",
+        "W = 10 x 5 = 50 J"
+      ],
+      "expectedTotal": 1
     }
   ]
 }

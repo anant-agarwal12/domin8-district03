@@ -141,3 +141,11 @@ def test_put_accepts_marks_that_add_up_even_with_fractions(client, fake_llm):
 def test_mismatch_error_leaves_plain_422s_as_invalid_input(client):
     res = client.put("/rubrics/r_x", json={"steps": []}, headers=H)
     assert res.status_code == 422 and res.json()["error"]["code"] == "invalid_input"
+
+
+def test_extract_prompt_asks_for_whole_answer_rules_to_be_copied_into_steps(client, fake_llm):
+    question = new_question(client)
+    fake_llm.push({"steps": RUBRIC_STEPS})
+    extract(client, question["id"])
+    prompt = fake_llm.calls[0]["prompt"]
+    assert "apply to the whole answer" in prompt and "every step it affects" in prompt

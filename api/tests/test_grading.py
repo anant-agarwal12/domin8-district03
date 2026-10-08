@@ -236,3 +236,20 @@ def test_response_has_exactly_the_shape_of_the_graded_mock(client, fake_llm):
         assert shape(attempt[key]) == shape(mock[key]), key
     for got, want in zip(attempt["stepResults"], mock["stepResults"]):
         assert {k: shape(v) for k, v in got.items()} == {k: shape(v) for k, v in want.items()}
+
+
+def test_grading_prompt_lets_explicit_rules_override_follow_through_and_requires_shown_lines():
+    from app.models import Question
+    from tests.helpers import QUESTION
+
+    prompt = grading.build_prompt(Question(id="q1", rubricId=None, **QUESTION), RUBRIC, ALL_LINES)
+    assert "that rule takes priority" in prompt and "no follow-through credit" in prompt
+    assert "shown or stated explicitly" in prompt and "earns no marks when that line is missing" in prompt
+
+
+def test_grading_prompt_asks_for_term_by_term_formula_comparison():
+    from app.models import Question
+    from tests.helpers import QUESTION
+
+    prompt = grading.build_prompt(Question(id="q1", rubricId=None, **QUESTION), RUBRIC, ALL_LINES)
+    assert "term by term" in prompt and "missing a term is not correct" in prompt
