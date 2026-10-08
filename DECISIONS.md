@@ -3,6 +3,11 @@
 Architecture decisions for Team DOMIN8. Newest first. Each entry is final until a newer entry replaces it.
 Both laptops pull `main` before starting any phase prompt, so both Claudes see the latest decisions.
 
+## D-004 — 2026-10-08 — Retry transient errors; model fallbacks
+Gemini errors 429/500/502/503/504 are retried with backoff. Then an optional second Gemini model (GEMINI_FALLBACK_MODEL),
+then Groq for text-only calls. Image calls have no Groq fallback. gemini-3.5-flash-lite is the default model; switch to a
+larger Flash model for grading if the Phase 2 accuracy harness shows lite is not accurate enough.
+
 ## D-003 — 2026-10-08 — Firebase on the free Spark plan only
 Auth (Google sign-in) and Firestore only. No Cloud Storage, no Cloud Functions, no billing account.
 Uploads stay on the API's local disk. Keep Firestore traffic small: no polling loops; one realtime listener for the teacher queue.
