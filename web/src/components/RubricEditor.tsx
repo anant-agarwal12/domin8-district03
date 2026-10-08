@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { api } from "@/lib/api";
+import { ApiError, api } from "@/lib/api";
 import { STEP_TYPES, STEP_TYPE_LABEL, msg } from "@/lib/labels";
 import { useLoad } from "@/lib/useLoad";
 import type { Rubric, RubricStepInput, StepType } from "@/lib/types";
@@ -14,6 +14,7 @@ import { Loading, btnGhost, btnPrimary, inputCls } from "./states";
 // Rows get a client-side key so reordering keeps each row's focus and state.
 type Row = RubricStepInput & { key: string };
 let keySeq = 0;
+const toApiError = (e: unknown) => (e instanceof ApiError ? e : new ApiError("internal", msg(e)));
 const toRow = (s: RubricStepInput): Row => ({ ...s, key: `k${keySeq++}` });
 const blank = (): Row => toRow({ description: "", marks: 1, type: "method", expected: "" });
 const toInput = (r: Row): RubricStepInput => ({
@@ -30,7 +31,7 @@ export function RubricEditor() {
   const [rubric, setRubric] = useState<Rubric | null>(null);
   const [rows, setRows] = useState<Row[]>([]);
   const [dirty, setDirty] = useState(false);
-  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<ApiError | null>(null);
   const [busy, setBusy] = useState<"save" | "confirm" | null>(null);
 
   // Adopt the freshly loaded rubric once (during render, per React's "adjusting state" pattern).
@@ -66,7 +67,7 @@ export function RubricEditor() {
       setDirty(false);
       return true;
     } catch (e) {
-      setActionError(msg(e));
+      setActionError(toApiError(e));
       return false;
     } finally {
       setBusy(null);
@@ -80,7 +81,7 @@ export function RubricEditor() {
     try {
       setRubric(await api.confirmRubric(rubricId));
     } catch (e) {
-      setActionError(msg(e));
+      setActionError(toApiError(e));
     } finally {
       setBusy(null);
     }
@@ -177,7 +178,10 @@ export function RubricEditor() {
         </div>
         {actionError && (
           <div className="mt-3">
-            <ErrorNotice title="That did not work" message={actionError} />
+            <ErrorNotice
+              title={actionError.code === "validation_error" ? "Marks do not add up" : "That did not work"}
+              message={actionError.message}
+            />
           </div>
         )}
         {confirmed && (

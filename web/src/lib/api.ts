@@ -19,6 +19,7 @@ import me from "@/mocks/me.json";
 import question from "@/mocks/question.json";
 import rubricConfirmed from "@/mocks/rubric_confirmed.json";
 import rubricProposed from "@/mocks/rubric_proposed.json";
+import errorValidation from "@/mocks/error_validation.json";
 import transcription from "@/mocks/transcription.json";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -99,6 +100,15 @@ function mockRubric(
   status: Rubric["status"],
   questionId = rubricProposed.questionId,
 ): Rubric {
+  const total = steps.reduce((t, s) => t + s.marks, 0);
+  // Mock mode mirrors the API's rule: step marks must equal the question's marks.
+  if (total !== question.marks) {
+    throw new ApiError(
+      errorValidation.error.code as ErrorCode,
+      `Rubric steps add up to ${total} marks but question ${question.id} is worth ${question.marks} marks`,
+      422,
+    );
+  }
   const full = steps.map((s, i) => ({ ...s, id: s.id ?? `s${Date.now()}_${i}` }));
   const rubric: Rubric = {
     ...(rubricProposed as Rubric),
