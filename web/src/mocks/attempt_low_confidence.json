@@ -1,0 +1,26 @@
+{
+  "id": "a_demo_2",
+  "uid": "demo-student-1",
+  "questionId": "q_demo_1",
+  "rubricId": "r_demo_1",
+  "inputType": "photo",
+  "imageId": "img_demo_2",
+  "lines": [
+    { "n": 1, "text": "Given: $m = 2$, $v = 3$", "legible": true },
+    { "n": 2, "text": "$E = \\frac{1}{2} m v^2$", "legible": true },
+    { "n": 3, "text": "$E = ?$", "legible": false },
+    { "n": 4, "text": "Answer: 9 J", "legible": true }
+  ],
+  "stepResults": [
+    { "stepId": "s1", "awarded": 2, "max": 2, "matchedLines": [1], "reason": "Given values stated with symbols.", "errorType": null, "fix": null },
+    { "stepId": "s2", "awarded": 2, "max": 2, "matchedLines": [2], "reason": "Correct formula written first.", "errorType": null, "fix": null },
+    { "stepId": "s3", "awarded": 1, "max": 2, "matchedLines": [3], "reason": "Substitution line could not be read clearly.", "errorType": "skipped_step", "fix": "Write the substitution step clearly on its own line." },
+    { "stepId": "s4", "awarded": 1, "max": 2, "matchedLines": [3], "reason": "Calculation not visible; only the result is shown.", "errorType": "skipped_step", "fix": "Show the working between substitution and result." },
+    { "stepId": "s5", "awarded": 2, "max": 2, "matchedLines": [4], "reason": "Final answer with correct units.", "errorType": null, "fix": null }
+  ],
+  "total": 8,
+  "max": 10,
+  "confidence": "low",
+  "confidenceReason": "Line 3 was illegible, so the grade may be wrong. A teacher will check it.",
+  "gradedAt": "2026-10-08T14:20:00Z"
+}
