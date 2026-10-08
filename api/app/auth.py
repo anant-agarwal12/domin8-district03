@@ -45,3 +45,8 @@ def current_user(
     except Exception as exc:  # firebase-admin raises several distinct error types
         raise ApiError("unauthorized", "Invalid or expired token") from exc
     return CurrentUser(uid=claims["uid"], name=claims.get("name") or claims.get("email", claims["uid"]))
+
+
+def get_role(db: Any, uid: str) -> str:
+    snap = db.collection("users").document(uid).get()
+    return (snap.to_dict() or {}).get("role", "student") if snap.exists else "student"

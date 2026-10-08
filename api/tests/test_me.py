@@ -2,11 +2,11 @@ def test_me_creates_student_on_first_call(client, db):
     res = client.get("/me", headers={"X-Dev-Uid": "u1"})
     assert res.status_code == 200
     assert res.json() == {"uid": "u1", "name": "u1", "role": "student", "course": None, "examDate": None}
-    assert db.docs["u1"]["role"] == "student"
+    assert db.data["users"]["u1"]["role"] == "student"
 
 
 def test_me_keeps_existing_role(client, db):
-    db.docs["t1"] = {"name": "Teacher", "role": "teacher", "course": "Physics", "examDate": "2026-11-01"}
+    db.data.setdefault("users", {})["t1"] = {"name": "Teacher", "role": "teacher", "course": "Physics", "examDate": "2026-11-01"}
     body = client.get("/me", headers={"X-Dev-Uid": "t1"}).json()
     assert body["role"] == "teacher"
     assert body["examDate"] == "2026-11-01"

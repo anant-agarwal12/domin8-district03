@@ -53,14 +53,19 @@ def generate(
     image: Image | None = None,
     schema: dict[str, Any] | None = None,
     temperature: float = 0.0,
+    cache_salt: str = "",
     settings: Settings | None = None,
 ) -> LlmResult:
-    """Text (or text + image) generation. `schema` is a JSON schema for structured output."""
+    """Text (or text + image) generation. `schema` is a JSON schema for structured output.
+
+    `cache_salt` changes the cache key without changing the prompt, so a deliberate second call
+    (a second grading, a retry after bad output) is not answered from the cache.
+    """
     settings = settings or get_settings()
     if not settings.gemini_api_key or not settings.gemini_model:
         raise ApiError("llm_failed", "GEMINI_API_KEY and GEMINI_MODEL must be set")
 
-    path = _cache_path(settings, prompt, image, schema, temperature)
+    path = _cache_path(settings, prompt, image, schema, temperature, cache_salt)
     hit = _cache_read(path)
     if hit:
         return hit
@@ -71,7 +76,12 @@ def generate(
 
 
 def _cache_path(
-    settings: Settings, prompt: str, image: Image | None, schema: dict[str, Any] | None, temperature: float
+    settings: Settings,
+    prompt: str,
+    image: Image | None,
+    schema: dict[str, Any] | None,
+    temperature: float,
+    cache_salt: str,
 ) -> Path:
     digest = hashlib.sha256()
     for part in (
@@ -79,6 +89,7 @@ def _cache_path(
         prompt,
         json.dumps(schema, sort_keys=True),
         repr(temperature),
+        cache_salt,
     ):
         digest.update(part.encode())
         digest.update(b"\0")
