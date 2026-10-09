@@ -1,0 +1,87 @@
+{
+  "uid": "demo-student-priya",
+  "course": "Engineering Physics",
+  "examDate": "2026-10-21",
+  "daysToExam": 12,
+  "mistakeDna": [
+    {
+      "errorType": "formula",
+      "count": 2,
+      "marksLost": 4,
+      "topics": [
+        "Work and energy"
+      ]
+    },
+    {
+      "errorType": "units",
+      "count": 2,
+      "marksLost": 3,
+      "topics": [
+        "Work and energy",
+        "Newton's laws"
+      ]
+    },
+    {
+      "errorType": "skipped_step",
+      "count": 3,
+      "marksLost": 3,
+      "topics": [
+        "Kinematics",
+        "Work and energy"
+      ]
+    },
+    {
+      "errorType": "calculation",
+      "count": 2,
+      "marksLost": 2,
+      "topics": [
+        "Newton's laws",
+        "Work and energy"
+      ]
+    },
+    {
+      "errorType": "concept",
+      "count": 1,
+      "marksLost": 2,
+      "topics": [
+        "Newton's laws"
+      ]
+    }
+  ],
+  "topPyqTopics": [
+    {
+      "topic": "Newton's laws",
+      "count": 9,
+      "years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "sharePct": 28
+    },
+    {
+      "topic": "Work and energy",
+      "count": 8,
+      "years": [
+        2021,
+        2023,
+        2024,
+        2025
+      ],
+      "sharePct": 24
+    },
+    {
+      "topic": "Kinematics",
+      "count": 7,
+      "years": [
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "sharePct": 21
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "pr_demo_1",
+  "topic": "Newton's laws",
+  "errorType": "units",
+  "reason": "Your last three answers lost marks for missing units, so these questions end with a unit check.",
+  "questions": [
+    {
+      "id": "pq1",
+      "text": "A 4 kg trolley accelerates at 3 m/s². What is the net force?",
+      "options": [
+        "12",
+        "12 N",
+        "12 kg"
+      ]
+    },
+    {
+      "id": "pq2",
+      "text": "A 2 kg ball is pushed by a 10 N force. What is its acceleration?",
+      "options": [
+        "5 m/s²",
+        "5 N",
+        "5"
+      ]
+    },
+    {
+      "id": "pq3",
+      "text": "Which is the correct SI unit of force?",
+      "options": [
+        "kg m/s",
+        "N",
+        "J"
+      ]
+    }
+  ]
+}

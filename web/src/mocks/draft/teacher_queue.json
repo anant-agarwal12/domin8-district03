@@ -1,0 +1,209 @@
+{
+  "items": [
+    {
+      "doubt": {
+        "id": "db_demo_1",
+        "uid": "demo-student-priya",
+        "studentName": "Priya S.",
+        "source": "evaluation",
+        "text": "Is my kinetic energy answer really 8 out of 10? Line 3 is my substitution.",
+        "topic": "Work and energy",
+        "errorType": "skipped_step",
+        "attemptId": "a_demo_photo",
+        "route": "teacher",
+        "priority": "normal",
+        "routeReason": "Grading confidence is low: line 3 was illegible, so a teacher should check it.",
+        "firedRules": [
+          {
+            "rule": 1,
+            "condition": "Grading confidence is low",
+            "route": "teacher",
+            "reason": "The handwriting on line 3 could not be read, so the grade may be wrong.",
+            "decisive": true
+          },
+          {
+            "rule": 4,
+            "condition": "Error type is skipped_step",
+            "route": "practice",
+            "reason": "Skipped steps are usually fixed with practice.",
+            "decisive": false
+          }
+        ],
+        "agentLog": [
+          {
+            "agent": "understanding",
+            "summary": "Topic: Work and energy. The formula line is correct; the substitution line is unreadable.",
+            "at": "2026-10-09T10:02:01Z"
+          },
+          {
+            "agent": "examiner",
+            "summary": "Graded 8 of 10 against the confirmed rubric. Confidence low: line 3 illegible.",
+            "at": "2026-10-09T10:02:04Z"
+          },
+          {
+            "agent": "policy",
+            "summary": "Rule 1 fired (low confidence). Rule 4 also fired, but rule 1 comes first.",
+            "at": "2026-10-09T10:02:04Z"
+          },
+          {
+            "agent": "orchestrator",
+            "summary": "Route: teacher. A person should check this grade before the student acts on it.",
+            "at": "2026-10-09T10:02:05Z"
+          }
+        ],
+        "overriddenFrom": null,
+        "overrideReason": null,
+        "status": "queued",
+        "createdAt": "2026-10-09T10:02:05Z"
+      },
+      "diagnosis": {
+        "summary": "Formula and final answer are right. Line 3 (the substitution) is unreadable, so two marks are uncertain.",
+        "attemptId": "a_demo_photo",
+        "mistakeDna": [
+          {
+            "errorType": "formula",
+            "count": 2,
+            "marksLost": 4,
+            "topics": [
+              "Work and energy"
+            ]
+          },
+          {
+            "errorType": "units",
+            "count": 2,
+            "marksLost": 3,
+            "topics": [
+              "Work and energy",
+              "Newton's laws"
+            ]
+          },
+          {
+            "errorType": "skipped_step",
+            "count": 3,
+            "marksLost": 3,
+            "topics": [
+              "Kinematics",
+              "Work and energy"
+            ]
+          },
+          {
+            "errorType": "calculation",
+            "count": 2,
+            "marksLost": 2,
+            "topics": [
+              "Newton's laws",
+              "Work and energy"
+            ]
+          },
+          {
+            "errorType": "concept",
+            "count": 1,
+            "marksLost": 2,
+            "topics": [
+              "Newton's laws"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "doubt": {
+        "id": "db_demo_5",
+        "uid": "demo-student-2",
+        "studentName": "Rohan K.",
+        "source": "manual",
+        "text": "I never state the formula before substituting. Does it really cost marks?",
+        "topic": "Work and energy",
+        "errorType": "formula",
+        "attemptId": null,
+        "route": "teacher",
+        "priority": "high",
+        "routeReason": "Concept gap on a top PYQ topic and the exam is 3 days away.",
+        "firedRules": [
+          {
+            "rule": 3,
+            "condition": "Concept gap on a top-5 PYQ topic and exam within 3 days",
+            "route": "teacher",
+            "reason": "Priority: little time left.",
+            "decisive": true
+          }
+        ],
+        "agentLog": [],
+        "overriddenFrom": null,
+        "overrideReason": null,
+        "status": "queued",
+        "createdAt": "2026-10-09T10:05:00Z"
+      },
+      "diagnosis": {
+        "summary": "Repeatedly skips the formula line on Work and energy questions.",
+        "attemptId": null,
+        "mistakeDna": [
+          {
+            "errorType": "formula",
+            "count": 2,
+            "marksLost": 4,
+            "topics": [
+              "Work and energy"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "doubt": {
+        "id": "db_demo_6",
+        "uid": "demo-student-3",
+        "studentName": "Ananya M.",
+        "source": "evaluation",
+        "text": "My work-done answer lost marks and I do not see why.",
+        "topic": "Work and energy",
+        "errorType": "formula",
+        "attemptId": null,
+        "route": "teacher",
+        "priority": "normal",
+        "routeReason": "Same topic and error type three times in a row.",
+        "firedRules": [
+          {
+            "rule": 2,
+            "condition": "Same topic and error type at least 3 times",
+            "route": "teacher",
+            "reason": "Explanations have not fixed it.",
+            "decisive": true
+          }
+        ],
+        "agentLog": [],
+        "overriddenFrom": null,
+        "overrideReason": null,
+        "status": "queued",
+        "createdAt": "2026-10-09T10:07:00Z"
+      },
+      "diagnosis": {
+        "summary": "Formula errors on three Work and energy attempts.",
+        "attemptId": null,
+        "mistakeDna": [
+          {
+            "errorType": "formula",
+            "count": 2,
+            "marksLost": 4,
+            "topics": [
+              "Work and energy"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "groupSuggestions": [
+    {
+      "topic": "Work and energy",
+      "errorType": "formula",
+      "doubtIds": [
+        "db_demo_1",
+        "db_demo_5",
+        "db_demo_6"
+      ],
+      "studentCount": 3,
+      "reason": "Three students share the same formula gap on Work and energy. One live session would cover them."
+    }
+  ]
+}

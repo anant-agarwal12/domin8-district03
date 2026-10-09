@@ -1,33 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Caveat, DM_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
+import { PresenterBar } from "@/components/PresenterBar";
+import { BRAND, TAGLINE } from "@/lib/brand";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], display: "swap" });
+const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"], display: "swap" });
+const caveat = Caveat({ variable: "--font-caveat", subsets: ["latin"], display: "swap" });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const viewport = { themeColor: "#fbf7f0" };
+export const viewport = { themeColor: "#f7f4ec" };
 
 export const metadata: Metadata = {
-  title: "xyz",
-  description: "Intelligent doubt resolution",
+  title: BRAND,
+  description: TAGLINE,
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+    <html lang="en" className={`${fraunces.variable} ${dmSans.variable} ${caveat.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col">
+        <AuthProvider>
+          {children}
+          <PresenterBar />
+        </AuthProvider>
       </body>
     </html>
   );

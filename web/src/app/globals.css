@@ -1,20 +1,25 @@
 @import "tailwindcss";
 
+/* Palette from the pitch deck. Orange = actions and marks lost. Blue = AI. Green = marks earned only. */
 :root {
-  --paper: #fbf7f0;
-  --surface: #ffffff;
+  --paper: #f7f4ec;
+  --surface: #fffdf8;
   --navy: #14213d;
-  --muted: #5b6478;
-  --line: #e8e0d2;
-  --accent: #e8590c;
+  --muted: #566074;
+  --line: #e2d9c6;
+  --accent: #c2410c;
   --accent-ink: #ffffff;
-  --danger: #b42318;
-  --danger-bg: #fdecea;
-  --pen: #d62828;
-  --hl: #fff1a8;
-  --warn: #8a5a00;
-  --warn-bg: #fff4d6;
-  --ok: #1a7f37;
+  --accent-light: #f4893b;
+  --pen: #c2410c;
+  --hl: #fbdcc0;
+  --ai: #1d4ed8;
+  --ai-bg: #e6edfd;
+  --ok: #17703a;
+  --ok-bg: #e3f2e8;
+  --danger: #a82014;
+  --danger-bg: #fbe9e6;
+  --warn: #7a4b00;
+  --warn-bg: #fdf0cf;
 }
 
 @theme inline {
@@ -25,24 +30,107 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
-  --color-danger: var(--danger);
-  --color-danger-bg: var(--danger-bg);
+  --color-accent-light: var(--accent-light);
   --color-pen: var(--pen);
   --color-hl: var(--hl);
+  --color-ai: var(--ai);
+  --color-ai-bg: var(--ai-bg);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
   --color-warn: var(--warn);
   --color-warn-bg: var(--warn-bg);
-  --color-ok: var(--ok);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-dm-sans);
+  --font-heading: var(--font-fraunces);
+  --font-hand: var(--font-caveat);
+}
+
+html {
+  scroll-padding-top: 6rem;
 }
 
 body {
   background: var(--paper);
   color: var(--navy);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--ai);
   outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* The teacher's pen: marks, fixes and annotations. */
+.hand {
+  font-family: var(--font-caveat), "Segoe Print", cursive;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Answer-sheet paper: faint ruled lines behind written work. */
+.ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(2.25rem - 1px),
+    var(--line) calc(2.25rem - 1px),
+    var(--line) 2.25rem
+  );
+}
+
+/* One deliberate moment: the score circle draws itself once. */
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.draw-once {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: draw 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Past-paper phrases highlighted on the notes (see PdfPage). */
+.pyq-hl {
+  background: var(--hl);
+  color: inherit;
+  border-bottom: 2px solid var(--accent-light);
+  border-radius: 2px;
 }

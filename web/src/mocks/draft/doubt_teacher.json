@@ -1,0 +1,55 @@
+{
+  "id": "db_demo_1",
+  "uid": "demo-student-priya",
+  "studentName": "Priya S.",
+  "source": "evaluation",
+  "text": "Is my kinetic energy answer really 8 out of 10? Line 3 is my substitution.",
+  "topic": "Work and energy",
+  "errorType": "skipped_step",
+  "attemptId": "a_demo_photo",
+  "route": "teacher",
+  "priority": "normal",
+  "routeReason": "Grading confidence is low: line 3 was illegible, so a teacher should check it.",
+  "firedRules": [
+    {
+      "rule": 1,
+      "condition": "Grading confidence is low",
+      "route": "teacher",
+      "reason": "The handwriting on line 3 could not be read, so the grade may be wrong.",
+      "decisive": true
+    },
+    {
+      "rule": 4,
+      "condition": "Error type is skipped_step",
+      "route": "practice",
+      "reason": "Skipped steps are usually fixed with practice.",
+      "decisive": false
+    }
+  ],
+  "agentLog": [
+    {
+      "agent": "understanding",
+      "summary": "Topic: Work and energy. The formula line is correct; the substitution line is unreadable.",
+      "at": "2026-10-09T10:02:01Z"
+    },
+    {
+      "agent": "examiner",
+      "summary": "Graded 8 of 10 against the confirmed rubric. Confidence low: line 3 illegible.",
+      "at": "2026-10-09T10:02:04Z"
+    },
+    {
+      "agent": "policy",
+      "summary": "Rule 1 fired (low confidence). Rule 4 also fired, but rule 1 comes first.",
+      "at": "2026-10-09T10:02:04Z"
+    },
+    {
+      "agent": "orchestrator",
+      "summary": "Route: teacher. A person should check this grade before the student acts on it.",
+      "at": "2026-10-09T10:02:05Z"
+    }
+  ],
+  "overriddenFrom": null,
+  "overrideReason": null,
+  "status": "queued",
+  "createdAt": "2026-10-09T10:02:05Z"
+}

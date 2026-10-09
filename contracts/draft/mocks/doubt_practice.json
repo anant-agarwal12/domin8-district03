@@ -1,0 +1,43 @@
+{
+  "id": "db_demo_3",
+  "uid": "demo-student-priya",
+  "studentName": "Priya S.",
+  "source": "evaluation",
+  "text": "I keep forgetting units in my final answer.",
+  "topic": "Newton's laws",
+  "errorType": "units",
+  "attemptId": "a_hist_3",
+  "route": "practice",
+  "priority": "normal",
+  "routeReason": "Units slips are fixed by practice, not by a new explanation.",
+  "firedRules": [
+    {
+      "rule": 4,
+      "condition": "Error type is units",
+      "route": "practice",
+      "reason": "Calculation-type errors go to practice.",
+      "decisive": true
+    }
+  ],
+  "agentLog": [
+    {
+      "agent": "understanding",
+      "summary": "Topic: Newton's laws. Error type: units, 3 times in the last 3 weeks.",
+      "at": "2026-10-09T10:20:01Z"
+    },
+    {
+      "agent": "policy",
+      "summary": "Rule 4 fired (units). Rule 2 needs 3 repeats on the same topic: not met.",
+      "at": "2026-10-09T10:20:01Z"
+    },
+    {
+      "agent": "orchestrator",
+      "summary": "Route: practice. Calling the practice agent for 3 questions.",
+      "at": "2026-10-09T10:20:02Z"
+    }
+  ],
+  "overriddenFrom": null,
+  "overrideReason": null,
+  "status": "open",
+  "createdAt": "2026-10-09T10:20:01Z"
+}

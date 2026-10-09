@@ -1,0 +1,48 @@
+{
+  "id": "db_demo_2",
+  "uid": "demo-student-priya",
+  "studentName": "Priya S.",
+  "source": "manual",
+  "text": "Why does the normal force go up when a lift accelerates upward?",
+  "topic": "Newton's laws",
+  "errorType": "concept",
+  "attemptId": null,
+  "route": "explain",
+  "priority": "normal",
+  "routeReason": "A concept gap with no earlier failed explanations: explain first, then check understanding.",
+  "firedRules": [
+    {
+      "rule": 5,
+      "condition": "Concept or formula gap",
+      "route": "explain",
+      "reason": "Explain, then one check question.",
+      "decisive": true
+    }
+  ],
+  "agentLog": [
+    {
+      "agent": "understanding",
+      "summary": "Topic: Newton's laws. Concept gap: net force and apparent weight.",
+      "at": "2026-10-09T10:10:01Z"
+    },
+    {
+      "agent": "policy",
+      "summary": "Rule 5 fired (concept gap). No higher rule matched.",
+      "at": "2026-10-09T10:10:01Z"
+    },
+    {
+      "agent": "orchestrator",
+      "summary": "Route: explain. Calling the tutor with the notes on Newton's second law.",
+      "at": "2026-10-09T10:10:02Z"
+    },
+    {
+      "agent": "tutor",
+      "summary": "Wrote an explanation citing notes page 2.",
+      "at": "2026-10-09T10:10:04Z"
+    }
+  ],
+  "overriddenFrom": null,
+  "overrideReason": null,
+  "status": "open",
+  "createdAt": "2026-10-09T10:10:01Z"
+}

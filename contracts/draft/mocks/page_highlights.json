@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "id": "h1",
+      "text": "N - mg = ma",
+      "pyqYears": [
+        2022,
+        2024,
+        2025
+      ],
+      "reason": "This equation appeared in three past papers."
+    },
+    {
+      "id": "h2",
+      "text": "apparent weight",
+      "pyqYears": [
+        2023
+      ],
+      "reason": "Asked once, in 2023."
+    }
+  ]
+}

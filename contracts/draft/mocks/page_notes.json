@@ -1,0 +1,19 @@
+{
+  "docId": "d_notes_1",
+  "page": 2,
+  "cached": true,
+  "notes": [
+    {
+      "id": "n1",
+      "text": "The net force on a body equals mass times acceleration: $F = ma$."
+    },
+    {
+      "id": "n2",
+      "text": "In a lift, the scale reads the normal force $N$, not your weight $mg$."
+    },
+    {
+      "id": "n3",
+      "text": "Upward acceleration: $N - mg = ma$. Downward: $mg - N = ma$."
+    }
+  ]
+}

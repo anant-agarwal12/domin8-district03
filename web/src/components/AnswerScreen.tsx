@@ -5,15 +5,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/api";
 import { msg } from "@/lib/labels";
-import { useLoad } from "@/lib/useLoad";
-import type { Question, Rubric } from "@/lib/types";
+import { useReadyQuestions } from "@/lib/useReadyQuestions";
 import { useAuth } from "./AuthProvider";
 import { ErrorNotice } from "./ErrorNotice";
 import { MathText } from "./Math";
 import { PageHeader } from "./Page";
 import { EmptyState, Loading, btnGhost, btnPrimary, inputCls } from "./states";
-
-type Ready = { question: Question; rubric: Rubric };
 
 const MATH_HINT = String.raw`Put maths between dollar signs, like $E = \frac{1}{2}mv^2$. A preview shows under each line.`;
 
@@ -26,14 +23,7 @@ export function AnswerScreen() {
   const [error, setError] = useState<string | null>(null);
 
   const course = profile?.course ?? "";
-  const loaded = useLoad<Ready[]>(course, async () => {
-    const { items } = await api.listQuestions(course);
-    const withRubric = items.filter((q) => q.rubricId);
-    const rubrics = await Promise.all(withRubric.map((q) => api.getRubric(q.rubricId!)));
-    return withRubric
-      .map((question, i) => ({ question, rubric: rubrics[i] }))
-      .filter((x) => x.rubric.status === "confirmed");
-  });
+  const loaded = useReadyQuestions(course);
   const ready = loaded.data;
 
   if (loaded.error) return <ErrorNotice title="Could not load questions" message={loaded.error} onRetry={loaded.retry} />;

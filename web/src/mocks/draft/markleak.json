@@ -1,0 +1,78 @@
+{
+  "totalLost": 14,
+  "totalMax": 32,
+  "byErrorType": [
+    {
+      "errorType": "formula",
+      "marksLost": 4
+    },
+    {
+      "errorType": "units",
+      "marksLost": 3
+    },
+    {
+      "errorType": "skipped_step",
+      "marksLost": 3
+    },
+    {
+      "errorType": "calculation",
+      "marksLost": 2
+    },
+    {
+      "errorType": "concept",
+      "marksLost": 2
+    }
+  ],
+  "byTopic": [
+    {
+      "topic": "Work and energy",
+      "marksLost": 9
+    },
+    {
+      "topic": "Newton's laws",
+      "marksLost": 4
+    },
+    {
+      "topic": "Kinematics",
+      "marksLost": 1
+    }
+  ],
+  "trend": [
+    {
+      "attemptId": "a_hist_0",
+      "date": "2026-09-27",
+      "total": 6,
+      "max": 10
+    },
+    {
+      "attemptId": "a_hist_1",
+      "date": "2026-09-30",
+      "total": 4,
+      "max": 5
+    },
+    {
+      "attemptId": "a_hist_2",
+      "date": "2026-10-02",
+      "total": 3,
+      "max": 6
+    },
+    {
+      "attemptId": "a_hist_3",
+      "date": "2026-10-04",
+      "total": 4,
+      "max": 5
+    },
+    {
+      "attemptId": "a_hist_4",
+      "date": "2026-10-06",
+      "total": 1,
+      "max": 6
+    }
+  ],
+  "topFix": {
+    "errorType": "formula",
+    "topic": "Work and energy",
+    "marksRecoverable": 4,
+    "advice": "Write the formula on its own line before you substitute. This one habit is worth about 4 marks across your attempts."
+  }
+}

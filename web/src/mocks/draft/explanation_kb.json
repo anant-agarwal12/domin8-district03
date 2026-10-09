@@ -1,0 +1,30 @@
+{
+  "id": "ex_demo_2",
+  "doubtId": "db_demo_4",
+  "answer": "Write the formula on its own line before you substitute. Examiners give a mark for stating $W = Fs\\cos\\theta$, and a missing $\\cos\\theta$ costs the substitution and calculation marks that follow. With $F = 10$ N, $s = 5$ m and $\\theta = 60^\\circ$: $W = 10 \\times 5 \\times 0.5 = 25$ J.",
+  "citations": [
+    {
+      "docId": "d_notes_1",
+      "docTitle": "Engineering Physics: mechanics notes",
+      "page": 3,
+      "snippet": "Work done by a force at an angle: W = F s cos(theta)."
+    }
+  ],
+  "kbCitations": [
+    {
+      "sessionId": "s_demo_1",
+      "teacherName": "Dr. Arjun Rao",
+      "resolvedOn": "2026-10-10",
+      "summary": "Always write the formula line first; marks follow the formula."
+    }
+  ],
+  "checkQuestion": {
+    "text": "A 10 N force acts at 90 degrees to a 5 m displacement. How much work does it do?",
+    "options": [
+      "50 J",
+      "0 J",
+      "25 J"
+    ]
+  },
+  "reason": "Answered with help from a teacher session that resolved the same gap earlier."
+}

@@ -1,0 +1,23 @@
+{
+  "id": "ex_demo_1",
+  "doubtId": "db_demo_2",
+  "answer": "When the lift accelerates upward, the floor has to push you up harder than gravity pulls you down. Newton's second law gives $N - mg = ma$, so $N = m(g + a)$. With $m = 60$ kg, $g = 10$ and $a = 2$ m/s$^2$, $N = 720$ N. That larger push is what you feel as being heavier.",
+  "citations": [
+    {
+      "docId": "d_notes_1",
+      "docTitle": "Engineering Physics: mechanics notes",
+      "page": 2,
+      "snippet": "Apparent weight: N - mg = ma for upward acceleration."
+    }
+  ],
+  "kbCitations": [],
+  "checkQuestion": {
+    "text": "The lift now accelerates downward at 2 m/s². What is the normal force on a 60 kg person?",
+    "options": [
+      "720 N",
+      "480 N",
+      "600 N"
+    ]
+  },
+  "reason": "Shown because this is a concept gap and your notes cover it on page 2."
+}

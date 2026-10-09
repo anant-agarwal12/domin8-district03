@@ -3,6 +3,10 @@
 Architecture decisions for Team DOMIN8. Newest first. Each entry is final until a newer entry replaces it.
 Both laptops pull `main` before starting any phase prompt, so both Claudes see the latest decisions.
 
+## D-005 — 2026-10-09 — Demo-first UI on mocks
+For the first pitch, Laptop 1 builds the full UI in /web against mocks while the teammate is paused. Phase 3–9 endpoint shapes are drafted in contracts/draft/ and become final when each backend phase starts: they move into contracts/api.md, and the web adjusts if a shape changes. Demo mode (persona picker, no Google sign-in) is for pitches only; real sign-in stays. The web app keeps the mock switch, so screens move to the real API phase by phase.
+If the teammate's unpushed web/phase-1 work turns up later, web/demo is the base and we take only what it adds.
+
 ## D-004 — 2026-10-08 — Retry transient errors; model fallbacks
 Gemini errors 429/500/502/503/504 are retried with backoff. Then an optional second Gemini model (GEMINI_FALLBACK_MODEL),
 then Groq for text-only calls. Image calls have no Groq fallback. gemini-3.5-flash-lite is the default model; switch to a

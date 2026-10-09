@@ -1,23 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/api";
-import { ERROR_LABEL } from "@/lib/labels";
+import { msg } from "@/lib/labels";
 import { useLoad } from "@/lib/useLoad";
 import type { Attempt, Question, Rubric, StepResult } from "@/lib/types";
+import { ErrorBadge } from "./ErrorBadge";
 import { ErrorNotice } from "./ErrorNotice";
+import { AlertIcon, EyeIcon } from "./Icons";
 import { MathText } from "./Math";
 import { PageHeader } from "./Page";
 import { ScoreStamp } from "./ScoreStamp";
-import { Loading } from "./states";
+import { Loading, btnPrimary } from "./states";
 
 type Data = { attempt: Attempt; rubric: Rubric; question: Question };
 
 export function ResultScreen() {
   const { id: attemptId } = useParams<{ id: string }>();
+  const router = useRouter();
   const [active, setActive] = useState<string | null>(null);
+  const [asking, setAsking] = useState(false);
+  const [askError, setAskError] = useState<string | null>(null);
   const { data, error, retry } = useLoad<Data>(attemptId, async () => {
     const attempt = await api.getAttempt(attemptId);
     const [rubric, question] = await Promise.all([
@@ -35,50 +40,84 @@ export function ResultScreen() {
   const activeResult = attempt.stepResults.find((r) => r.stepId === active);
   const highlighted = new Set(activeResult?.matchedLines ?? []);
   const lost = attempt.stepResults.filter((r) => r.awarded < r.max);
+  const low = attempt.confidence === "low";
+  const handwritten = attempt.inputType === "photo";
+
+  async function askTeacher() {
+    setAsking(true);
+    setAskError(null);
+    try {
+      const doubt = await api.createDoubt({
+        source: "evaluation",
+        attemptId: attempt.id,
+        text: `Please check how my ${question.topic} answer was marked.`,
+      });
+      router.push(`/doubts/${encodeURIComponent(doubt.id)}`);
+    } catch (e) {
+      setAskError(msg(e));
+      setAsking(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-5xl">
-      <PageHeader title="Your result" back={{ href: "/attempts", label: "My attempts" }} />
+      <PageHeader title="Your marked answer" back={{ href: "/attempts", label: "My attempts" }} />
 
-      {attempt.confidence === "low" && (
-        <div role="status" className="mb-5 rounded-xl border border-warn/30 bg-warn-bg p-4 text-warn">
-          <p className="font-semibold">Low confidence — a teacher will check this</p>
-          <p className="mt-1 text-sm">{attempt.confidenceReason ?? "The grader was not sure about this answer."}</p>
+      {low && (
+        <div role="status" className="mb-6 flex gap-3 rounded-md border border-warn/40 bg-warn-bg p-4 text-warn">
+          <AlertIcon className="mt-0.5 size-5 shrink-0" />
+          <div>
+            <p className="font-semibold">Low confidence. A teacher should check this.</p>
+            <p className="mt-1 text-sm">{attempt.confidenceReason ?? "The grader was not sure about this answer."}</p>
+          </div>
         </div>
       )}
 
-      <section className="mb-6 flex flex-col items-center gap-5 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:flex-row sm:items-center">
+      <section className="mb-8 flex flex-col items-center gap-6 border-y border-line py-6 sm:flex-row">
         <ScoreStamp total={attempt.total} max={attempt.max} />
         <div className="min-w-0 text-center sm:text-left">
           <p className="text-sm text-muted">{question.topic}</p>
-          <p className="mt-1"><MathText text={question.text} /></p>
-          <p className="mt-3 text-sm">
+          <p className="mt-1 max-w-[52ch] text-lg">
+            <MathText text={question.text} />
+          </p>
+          <p className="mt-3 text-muted">
             {lost.length === 0
               ? "Full marks. Nothing to fix."
-              : `${lost.length} step${lost.length > 1 ? "s" : ""} lost marks — see the fixes below.`}
+              : `${lost.length} of ${attempt.stepResults.length} steps lost marks. The fixes are below.`}
           </p>
         </div>
       </section>
 
-      <div className="grid gap-6 md:grid-cols-[2fr_3fr]">
-        <section aria-labelledby="ans" className="md:sticky md:top-32 md:self-start">
-          <h2 id="ans" className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Your answer</h2>
-          <ol className="rounded-2xl border border-line bg-surface p-3 shadow-sm">
+      <div className="grid gap-8 md:grid-cols-[2fr_3fr]">
+        <section aria-labelledby="ans" className="md:sticky md:top-36 md:self-start">
+          <h2 id="ans" className="mb-2 text-xl">
+            Your answer
+          </h2>
+          <ol className="ruled rounded-md border border-line bg-surface px-3 py-1">
             {attempt.lines.map((l) => (
               <li
                 key={l.n}
-                className={`flex gap-3 rounded-md px-2 py-1.5 transition-colors ${highlighted.has(l.n) ? "bg-hl" : ""}`}
+                className={`flex min-h-9 items-center gap-3 rounded-sm px-1 transition-colors ${highlighted.has(l.n) ? "bg-hl" : ""}`}
               >
-                <span className="w-5 shrink-0 text-right text-sm text-muted">{l.n}</span>
-                <span className="min-w-0 overflow-x-auto"><MathText text={l.text} /></span>
+                <span className="w-5 shrink-0 text-right text-sm text-muted tnum">{l.n}</span>
+                <span className={`min-w-0 overflow-x-auto ${handwritten ? "font-hand text-2xl" : ""}`}>
+                  <MathText text={l.text} />
+                </span>
+                {l.legible === false && (
+                  <span className="ml-auto inline-flex shrink-0 items-center gap-1 text-sm text-warn">
+                    <EyeIcon className="size-4" /> Hard to read
+                  </span>
+                )}
               </li>
             ))}
           </ol>
         </section>
 
         <section aria-labelledby="steps">
-          <h2 id="steps" className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Step by step</h2>
-          <ul className="space-y-3">
+          <h2 id="steps" className="mb-2 text-xl">
+            Step by step
+          </h2>
+          <ul className="divide-y divide-line border-y border-line">
             {attempt.stepResults.map((r) => (
               <StepRow
                 key={r.stepId}
@@ -91,15 +130,26 @@ export function ResultScreen() {
               />
             ))}
           </ul>
-          <p className="mt-4 text-sm text-muted">
-            Total {attempt.total} / {attempt.max}. <Link href="/answer" className="font-medium text-accent underline">Try another question</Link>
-          </p>
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <button type="button" onClick={() => void askTeacher()} disabled={asking} className={btnPrimary}>
+              {asking ? "Sending…" : "Ask a teacher to review"}
+            </button>
+            <Link href="/answer" className="font-medium text-ai underline">
+              Try another question
+            </Link>
+          </div>
+          {askError && (
+            <div className="mt-4">
+              <ErrorNotice title="Could not send this to a teacher" message={askError} />
+            </div>
+          )}
         </section>
       </div>
     </div>
   );
 }
 
+// One rubric step, marked in the margin like a script: the mark in pen, the reason in plain words, the fix as a note.
 function StepRow({
   result: r,
   title,
@@ -124,37 +174,32 @@ function StepRow({
         onMouseEnter={onActivate}
         onMouseLeave={onLeave}
         onClick={onToggle}
-        className={`w-full rounded-2xl border bg-surface p-4 text-left shadow-sm transition-colors ${
-          active ? "border-navy/40" : "border-line"
-        } ${full ? "" : "border-l-4 border-l-pen"}`}
+        className={`grid w-full grid-cols-[4.5rem_1fr] items-start gap-3 py-4 text-left transition-colors ${active ? "bg-hl/50" : "hover:bg-hl/30"}`}
       >
-        <span className="flex items-start justify-between gap-3">
-          <span className="font-medium">{title}</span>
-          <span className={`shrink-0 text-lg font-bold ${full ? "text-ok" : "text-pen"}`}>
-            {r.awarded} / {r.max}
-          </span>
+        <span className={`hand text-4xl tnum ${full ? "text-ok" : "text-pen"}`}>
+          {r.awarded}/{r.max}
         </span>
-        <span className="mt-1 block text-sm">{r.reason}</span>
-        {!full && (
-          <span className="mt-3 block space-y-2">
-            {r.errorType && (
-              <span className="inline-block rounded-full bg-pen/10 px-2.5 py-0.5 text-xs font-semibold text-pen">
-                {ERROR_LABEL[r.errorType]}
-              </span>
-            )}
-            {r.fix && (
-              <span className="block rounded-lg bg-paper p-2.5 text-sm">
-                <span className="font-semibold">Fix: </span>
-                {r.fix}
-              </span>
-            )}
+        <span className="min-w-0">
+          <span className="block font-medium">{title}</span>
+          <span className="mt-0.5 block text-sm text-muted">
+            <MathText text={r.reason} />
           </span>
-        )}
-        {r.matchedLines.length > 0 && (
-          <span className="mt-2 block text-xs text-muted">
-            Evidence: line{r.matchedLines.length > 1 ? "s" : ""} {r.matchedLines.join(", ")}
-          </span>
-        )}
+          {!full && (
+            <span className="mt-2 flex flex-wrap items-center gap-2">
+              {r.errorType && <ErrorBadge type={r.errorType} />}
+            </span>
+          )}
+          {!full && r.fix && (
+            <span className="hand mt-2 block text-xl text-pen">
+              <MathText text={r.fix} />
+            </span>
+          )}
+          {r.matchedLines.length > 0 && (
+            <span className="mt-1 block text-xs text-muted">
+              Evidence: line{r.matchedLines.length > 1 ? "s" : ""} {r.matchedLines.join(", ")}
+            </span>
+          )}
+        </span>
       </button>
     </li>
   );

@@ -1,4 +1,4 @@
-import type { ErrorType, StepType } from "./types";
+import type { AgentName, ErrorType, Route, StepType } from "./types";
 
 export const STEP_TYPES: StepType[] = [
   "setup",
@@ -30,3 +30,25 @@ export const ERROR_LABEL: Record<ErrorType, string> = {
 };
 
 export const msg = (e: unknown) => (e instanceof Error ? e.message : "Something went wrong.");
+
+export const AGENT_LABEL: Record<AgentName, string> = {
+  understanding: "Understanding",
+  examiner: "Examiner",
+  policy: "Policy check",
+  orchestrator: "Decision",
+  tutor: "Tutor",
+  practice: "Practice",
+  matchmaker: "Matchmaker",
+};
+
+export const ROUTE_LABEL: Record<Route, string> = {
+  explain: "Explanation",
+  practice: "Practice",
+  teacher: "Teacher",
+};
+
+export const ROUTE_SENTENCE: Record<Route, string> = {
+  explain: "An explanation first.",
+  practice: "Practice first.",
+  teacher: "A teacher will take this.",
+};

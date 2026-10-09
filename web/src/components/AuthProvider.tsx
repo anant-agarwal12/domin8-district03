@@ -11,6 +11,8 @@ import {
 } from "react";
 import { onAuthStateChanged, signInWithPopup, signOut as fbSignOut } from "firebase/auth";
 import { api } from "@/lib/api";
+import { DEMO_MODE } from "@/lib/config";
+import { setPersona, usePersona, type Persona } from "@/lib/demo";
 import { auth, firebaseConfigured, googleProvider } from "@/lib/firebase";
 import type { User } from "@/lib/types";
 
@@ -24,6 +26,8 @@ type AuthState = {
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
   reloadProfile: () => Promise<void>;
+  // Demo mode only: sign in as a persona. Undefined when demo mode is off.
+  choosePersona?: (p: Persona) => void;
 };
 
 const AuthContext = createContext<AuthState | null>(null);
@@ -31,35 +35,66 @@ const AuthContext = createContext<AuthState | null>(null);
 const message = (e: unknown) => (e instanceof Error ? e.message : "Something went wrong.");
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [status, setStatus] = useState<Status>(firebaseConfigured ? "loading" : "signed_out");
+  const persona = usePersona(); // undefined until the browser has been read
+  const [firebaseStatus, setFirebaseStatus] = useState<Status>(firebaseConfigured ? "loading" : "signed_out");
   const [profile, setProfile] = useState<User | null>(null);
   const [profileError, setProfileError] = useState<string | null>(null);
   const [signInError, setSignInError] = useState<string | null>(
-    firebaseConfigured
+    firebaseConfigured || DEMO_MODE
       ? null
       : "Firebase is not configured. Set the NEXT_PUBLIC_FIREBASE_* variables in web/.env.local.",
   );
 
+  const status: Status = DEMO_MODE
+    ? persona === undefined
+      ? "loading"
+      : persona
+        ? "signed_in"
+        : "signed_out"
+    : firebaseStatus;
+
   const reloadProfile = useCallback(async () => {
-    setProfileError(null);
     try {
-      setProfile(await api.getMe());
+      const me = await api.getMe();
+      setProfile(me);
+      setProfileError(null);
     } catch (e) {
       setProfile(null);
       setProfileError(message(e));
     }
   }, []);
 
+  // Demo mode: the profile follows the chosen persona.
   useEffect(() => {
-    if (!auth) return;
+    if (!DEMO_MODE || !persona) return;
+    let alive = true;
+    api.getMe().then(
+      (me) => {
+        if (!alive) return;
+        setProfile(me);
+        setProfileError(null);
+      },
+      (e) => {
+        if (!alive) return;
+        setProfile(null);
+        setProfileError(message(e));
+      },
+    );
+    return () => {
+      alive = false;
+    };
+  }, [persona]);
+
+  useEffect(() => {
+    if (DEMO_MODE || !auth) return;
     return onAuthStateChanged(auth, (fbUser) => {
       if (!fbUser) {
         setProfile(null);
         setProfileError(null);
-        setStatus("signed_out");
+        setFirebaseStatus("signed_out");
         return;
       }
-      setStatus("signed_in");
+      setFirebaseStatus("signed_in");
       void reloadProfile();
     });
   }, [reloadProfile]);
@@ -77,12 +112,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
-    if (auth) await fbSignOut(auth);
+    if (DEMO_MODE) setPersona(null);
+    else if (auth) await fbSignOut(auth);
   }, []);
 
-  const value = useMemo(
-    () => ({ status, profile, profileError, signInError, signIn, signOut, reloadProfile }),
-    [status, profile, profileError, signInError, signIn, signOut, reloadProfile],
+  // With no persona chosen there is no signed-in user, whatever an earlier persona left behind.
+  const signedOutDemo = DEMO_MODE && !persona;
+
+  const value = useMemo<AuthState>(
+    () => ({
+      status,
+      profile: signedOutDemo ? null : profile,
+      profileError: signedOutDemo ? null : profileError,
+      signInError,
+      signIn,
+      signOut,
+      reloadProfile,
+      choosePersona: DEMO_MODE ? (p: Persona) => setPersona(p) : undefined,
+    }),
+    [status, signedOutDemo, profile, profileError, signInError, signIn, signOut, reloadProfile],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
